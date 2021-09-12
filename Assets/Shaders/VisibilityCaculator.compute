@@ -1,0 +1,82 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel kernelCyanVisCalCs
+#pragma kernel kernelMagentaVisCalCs
+#pragma kernel kernelYellowVisCalCs
+#pragma kernel kernelBlackVisCalCs
+#pragma kernel kernelHalftoneCalCs
+
+#include "particlesStruct.cginc"
+
+ConsumeStructuredBuffer<float2> allCyanPoints;
+ConsumeStructuredBuffer<float2> allMagentaPoints;
+ConsumeStructuredBuffer<float2> allYellowPoints;
+ConsumeStructuredBuffer<float2> allBlackPoints;
+AppendStructuredBuffer<halftonePoint> visibleCyanPoints;
+AppendStructuredBuffer<halftonePoint> visibleMagentaPoints;
+AppendStructuredBuffer<halftonePoint> visibleYellowPoints;
+AppendStructuredBuffer<halftonePoint> visibleBlackPoints;
+
+RWTexture3D<float> layeredHalftones;
+int sizeOfHalftone;
+
+cbuffer onValidate
+{
+    float2 screenParticleSize;
+    int numberOfElements;
+
+}
+
+inline void caculatePoints(uint idx, ConsumeStructuredBuffer<float2> inPoints, AppendStructuredBuffer<halftonePoint> outPoints)
+{
+    if (idx >= numberOfElements)
+        return;
+
+    float2 actualPoint = inPoints.Consume();
+    if (abs(actualPoint.x) <= 1.0f + screenParticleSize.x && abs(actualPoint.y) <= 1.0f + screenParticleSize.y)
+    {
+        
+        halftonePoint newPoint;
+        newPoint.position = actualPoint;
+        newPoint.density = 1.0f;
+        outPoints.Append(newPoint);
+    }
+}
+
+
+[numthreads(dispatchSize, 1, 1)]
+void kernelCyanVisCalCs(uint3 id : SV_DispatchThreadID)
+{
+    caculatePoints(id.x, allCyanPoints, visibleCyanPoints);
+}
+
+[numthreads(dispatchSize, 1, 1)]
+void kernelMagentaVisCalCs(uint3 id : SV_DispatchThreadID)
+{
+    caculatePoints(id.x, allMagentaPoints, visibleMagentaPoints);
+}
+
+[numthreads(dispatchSize, 1, 1)]
+void kernelYellowVisCalCs(uint3 id : SV_DispatchThreadID)
+{
+    caculatePoints(id.x, allYellowPoints, visibleYellowPoints);
+}
+
+[numthreads(dispatchSize, 1, 1)]
+void kernelBlackVisCalCs(uint3 id : SV_DispatchThreadID)
+{
+    caculatePoints(id.x, allBlackPoints, visibleBlackPoints);
+}
+
+[numthreads(8,8,8)]
+void kernelHalftoneCalCs(uint3 id : SV_DispatchThreadID)
+{
+    int resX, resY, resZ;
+    layeredHalftones.GetDimensions(resX, resY, resZ);
+    float2 uv = float2(((float) id.x) / (resX), ((float) id.y) / (resY));
+    float2 recentedUvs = uv * 2.0f - float2(1.0f, 1.0f);
+    float gradient = 1.0f - saturate(length(recentedUvs));
+    layeredHalftones[id].r = sqrt(sqrt(gradient));
+
+        
+
+}
