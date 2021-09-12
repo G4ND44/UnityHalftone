@@ -280,10 +280,10 @@ MonoBehaviour:
     type: 3}
   pointsAtributesCalculator: {fileID: 7200000, guid: c67d536156f0e424e8175a84d408da9a,
     type: 3}
-  particleSizeMultipiler: 1.91
+  particleSizeMultipiler: 1.28
   particlesShader: {fileID: 4800000, guid: ea3b871daddcfe747abd1be1ac45d958, type: 3}
   particleTex: {fileID: 2800000, guid: fb8ba05819763fe4db6d48b79eabd7fb, type: 3}
-  distanceBeetwenPoints: 16
+  distanceBeetwenPoints: 10
   cyanEfficency: 0.9
   magentaEfficency: 0.895
   yellowEfficency: 0.898

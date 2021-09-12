@@ -301,13 +301,6 @@ public class HalftoneController : MonoBehaviour
         pointsVisibilityCalculator.Dispatch(kernelYellowVisCalCs, dipstachNumbers, 1, 1);
         pointsVisibilityCalculator.Dispatch(kernelBlackVisCalCs, dipstachNumbers, 1, 1);
 
-        // Debug.Log(dipstachNumbers);
-        //Debug.Log( testDrawParams[1]); 
-
-        // halftonePoint[] debugValues = new halftonePoint[visibleCyanPoints.count];
-        // visibleCyanPoints.GetData(debugValues);
-
-        //Debug.Log( debugValues[0].screenPos); 
 
         ComputeBuffer.CopyCount(visibleCyanPoints, drawIndirectCyan, sizeof(uint));
         ComputeBuffer.CopyCount(visibleMagentaPoints, drawIndirectMagenta, sizeof(uint));
@@ -326,7 +319,6 @@ public class HalftoneController : MonoBehaviour
         uint[] yellowDrawParams = new uint[4];
         drawIndirectYellow.GetData(yellowDrawParams);
         numberOfYellowPoints = (int)yellowDrawParams[1];
-        // Debug.Log(yellowDrawParams[1]);
 
         uint[] blackDrawParams = new uint[4];
         drawIndirectBlack.GetData(blackDrawParams);

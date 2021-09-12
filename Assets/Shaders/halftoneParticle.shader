@@ -1,4 +1,4 @@
-Shader "Custom/HalftoneParticle"
+Shader "Halftone/HalftoneParticle"
 {
 	Properties
 	{
