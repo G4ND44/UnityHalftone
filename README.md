@@ -9,3 +9,5 @@ It works by adding Halftone Controller on game camera
 
 It olso have example of recreating compute shader data via expression. It uses modified template because there was no way to get around UnityToClipPos in all templates. Should not be issue with normal use cases (modified template not in project, but you shuold be able to get used expression)
 ![ase](https://i.imgur.com/jY8ykL4.png)
+
+If you want to know more about the process follow the tutorial http://tech-dank-bank.org/tutorials/unity-halftone-post-process-with-compute-shaders/
